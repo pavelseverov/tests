@@ -1,0 +1,33 @@
+<html><body>
+
+<textarea name="source" id="source" wrap=hard rows="7" cols="64"></textarea>
+<br><br><input type="button" onclick='try {
+
+	var url = "Notes://";
+	var link = document.getElementById("source").value;			
+        var server = link.match(/<HINT>CN=(\S+)\/O/);
+	if (server != null) url+=server[1]; 
+			
+	myRegExp = new RegExp(/<REPLICA\s+([0-9a-f]{8}):([0-9a-f]{8})/gim);
+	var replicaIdArray = myRegExp.exec(link);
+	var replicaId = replicaIdArray[1]+replicaIdArray[2];
+        if (replicaId != null) 	url+="/"+replicaId; 
+			
+	myRegExp = new RegExp(/VIEW\s+OF([0-9a-f]{8}):([0-9a-f]{8})-ON([0-9a-f]{8}):([0-9a-f]{8})/gim);
+	var viewArray = myRegExp.exec(link);
+	if (viewArray != null) url+="/"+viewArray[1]+viewArray[2]+viewArray[3]+viewArray[4]; ;
+	
+	myRegExp = new RegExp(/NOTE\s+OF([0-9a-f]{8}):([0-9a-f]{8})-ON([0-9a-f]{8}):([0-9a-f]{8})/gim);
+	var noteArray = myRegExp.exec(link);
+	if (noteArray!=null) url+="/" + noteArray[1]+noteArray[2]+noteArray[3]+noteArray[4]; 
+
+        document.getElementById("url").innerHTML="Result of conversion: <a href=\""+url+"\">"+url+"</a>";
+
+
+} catch (e) {
+	alert (e.description);
+}' value='Paste your Notes link and click here to convert it to URL'>
+
+<br><br><span id="url"></span>
+
+</body></html>
